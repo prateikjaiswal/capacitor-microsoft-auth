@@ -7,7 +7,6 @@ export declare class CapacitorMicrosoftAuthWeb extends WebPlugin implements Capa
     private oAuthconfiguration;
     constructor();
     authenticate(options: OAuth2AuthenticateBaseOptions): Promise<any>;
-    ssoSilentCall(resolve: any, reject: any): Promise<void>;
     loginWithPopup(resolve: any, reject: any): Promise<void>;
     acquireTokenSilently(resolve: any, reject: any): Promise<void>;
     configure(): void;

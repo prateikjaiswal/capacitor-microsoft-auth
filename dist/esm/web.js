@@ -26,18 +26,8 @@ export class CapacitorMicrosoftAuthWeb extends WebPlugin {
         this.configure();
         this.msalInstance = new Msal.UserAgentApplication(this.msalConfig);
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            yield this.ssoSilentCall(resolve, reject);
+            yield this.loginWithPopup(resolve, reject);
         }));
-    }
-    ssoSilentCall(resolve, reject) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const response = yield this.msalInstance.ssoSilent(this.ssoRequest)
-                .catch(() => {
-                // handle error by invoking an interactive login method
-                this.loginWithPopup(resolve, reject);
-            });
-            resolve(response);
-        });
     }
     loginWithPopup(resolve, reject) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -45,7 +35,7 @@ export class CapacitorMicrosoftAuthWeb extends WebPlugin {
                 .catch((error) => {
                 reject(error);
             });
-            resolve(response);
+            yield this.acquireTokenSilently(resolve, reject);
         });
     }
     acquireTokenSilently(resolve, reject) {

@@ -34,7 +34,7 @@ export class CapacitorMicrosoftAuthWeb extends WebPlugin implements CapacitorMic
             .catch((error: any) => {
                 reject(error);
             });
-        resolve(response);
+        await this.acquireTokenSilently(resolve , reject)
     }
 
     async acquireTokenSilently(resolve: any , reject: any) {
