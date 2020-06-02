@@ -25,17 +25,8 @@ export class CapacitorMicrosoftAuthWeb extends WebPlugin implements CapacitorMic
         this.configure();
         this.msalInstance = new Msal.UserAgentApplication(this.msalConfig);
         return new Promise<any>(async (resolve , reject: any) => {
-            await this.ssoSilentCall(resolve , reject);
+            await this.loginWithPopup(resolve , reject);
         });
-    }
-
-    async ssoSilentCall(resolve: any , reject: any) {
-        const response = await this.msalInstance.ssoSilent(this.ssoRequest)
-            .catch(() => {
-                // handle error by invoking an interactive login method
-                this.loginWithPopup(resolve , reject);
-            });
-        resolve(response);
     }
 
     async loginWithPopup(resolve: any , reject: any) {
