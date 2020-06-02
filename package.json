@@ -1,0 +1,54 @@
+{
+  "name": "capacitor-microsoft-auth",
+  "version": "0.0.2",
+  "description": "Capacitor plugin for Microsoft Authentication",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Pratik Jaiswal",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/core": "latest"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.0",
+    "typescript": "^3.2.4",
+    "@capacitor/ios": "latest",
+    "@capacitor/android": "latest"
+  },
+  "files": [
+    "dist/",
+    "ios/",
+    "android/",
+    "CapacitorMicrosoftAuth.podspec"
+  ],
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native",
+    "msal",
+    "microsoft",
+    "login",
+    "aad"
+  ],
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prateikjaiswal/capacitor-microsoft-auth.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prateikjaiswal/capacitor-microsoft-auth.git/issues"
+  }
+}
