@@ -71,6 +71,8 @@ export interface OAuth2AuthenticateBaseOptions {
      * and sends it as using state is recommended.
      */
     state?: string;
+    email?: string;
+    tenant?: string;
     /**
      * Additional parameters for the created authorization url
      */

@@ -7,26 +7,84 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { WebPlugin } from '@capacitor/core';
+import { registerWebPlugin, WebPlugin } from "@capacitor/core";
+import * as Msal from "msal";
 export class CapacitorMicrosoftAuthWeb extends WebPlugin {
     constructor() {
         super({
-            name: 'CapacitorMicrosoftAuth',
-            platforms: ['web']
-        });
-    }
-    echo(options) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('ECHO', options);
-            return options;
+            name: "CapacitorMicrosoftAuth",
+            platforms: ["web"]
         });
     }
     authenticate(options) {
-        return Promise.resolve(options);
+        this.oAuthconfiguration = {
+            scopes: options.scopes,
+            clientId: options.clientId,
+            email: options.email,
+            tenant: options.tenant
+        };
+        this.configure();
+        this.msalInstance = new Msal.UserAgentApplication(this.msalConfig);
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            yield this.ssoSilentCall(resolve, reject);
+        }));
+    }
+    ssoSilentCall(resolve, reject) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.msalInstance.ssoSilent(this.ssoRequest)
+                .catch(() => {
+                // handle error by invoking an interactive login method
+                this.loginWithPopup(resolve, reject);
+            });
+            resolve(response);
+        });
+    }
+    loginWithPopup(resolve, reject) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield this.msalInstance.loginPopup(this.ssoRequest)
+                .catch((error) => {
+                reject(error);
+            });
+            resolve(response);
+        });
+    }
+    acquireTokenSilently(resolve, reject) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // if the user is already logged in you can acquire a token
+            if (this.msalInstance.getAccount()) {
+                const tokenRequest = {
+                    scopes: this.oAuthconfiguration.scopes
+                };
+                const response = yield this.msalInstance.acquireTokenSilent(tokenRequest)
+                    .catch((error) => __awaiter(this, void 0, void 0, function* () {
+                    if (error.name === "InteractionRequiredAuthError") {
+                        yield this.loginWithPopup(resolve, reject);
+                    }
+                    else {
+                        reject(error);
+                    }
+                }));
+                resolve(response);
+            }
+            else {
+                yield this.loginWithPopup(resolve, reject);
+            }
+        });
+    }
+    configure() {
+        this.msalConfig = {
+            auth: {
+                clientId: this.oAuthconfiguration.clientId
+            }
+        };
+        this.ssoRequest = {
+            scopes: this.oAuthconfiguration.scopes,
+            loginHint: this.oAuthconfiguration.email,
+            extraQueryParameters: { domain_hint: this.oAuthconfiguration.tenant }
+        };
     }
 }
 const CapacitorMicrosoftAuth = new CapacitorMicrosoftAuthWeb();
 export { CapacitorMicrosoftAuth };
-import { registerWebPlugin } from '@capacitor/core';
 registerWebPlugin(CapacitorMicrosoftAuth);
 //# sourceMappingURL=web.js.map
