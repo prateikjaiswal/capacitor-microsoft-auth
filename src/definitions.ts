@@ -10,34 +10,17 @@ export interface CapacitorMicrosoftAuthPlugin {
    * @param {OAuth2AuthenticateOptions} options
    * @returns {Promise<any>} the resource url response
    */
-  authenticate(options: OAuth2AuthenticateBaseOptions): Promise<any>;
+  authenticate(options: AuthenticationParameters): Promise<any>;
+  signout(options: AuthenticationParameters): Promise<any>;
 }
 
-
-export interface OAuth2AuthenticateOptions extends OAuth2AuthenticateBaseOptions {
-
-  /**
-   * Custom options for the platform "web"
-   */
-  web?: WebOption,
-  /**
-   * Custom options for the platform "android"
-   */
-  android?: AndroidOptions,
-  /**
-   * Custom options for the platform "ios"
-   */
-  ios?: IosOptions,
-}
-
-export interface OAuth2AuthenticateBaseOptions {
+export interface AuthenticationParameters {
   /**
    * The app id (client id) you get from the oauth provider like Google, Facebook,...
    *
    * required!
    */
   clientId?: string;
-  graphEndpoint?: string;
   /**
    * The base url for retrieving tokens depending on the response type from a OAuth 2 provider. e.g. https://accounts.google.com/o/oauth2/auth
    *
@@ -77,46 +60,10 @@ export interface OAuth2AuthenticateBaseOptions {
    */
   state?: string;
   email?: string;
-  tenant?:string
+  tenant?: string
+  graphEndpoint?: string;
   /**
    * Additional parameters for the created authorization url
    */
   additionalParameters?: { [key: string]: string }
-}
-
-export interface WebOption extends OAuth2AuthenticateBaseOptions {
-  /**
-   * Options for the window the plugin open for authentication. e.g. width=500,height=600,left=0,top=0
-   */
-  windowOptions?: string;
-  /**
-   * Options for the window target. defaults to _blank
-   */
-  windowTarget?: string;
-}
-
-export interface AndroidOptions extends OAuth2AuthenticateBaseOptions {
-  /**
-   * Some oauth provider especially Facebook forces us to use their SDK for apps.
-   *
-   * Provide a class name implementing the 'ByteowlsCapacitorOauth2.OAuth2CustomHandler' protocol.
-   */
-  customHandlerClass?: string;
-  /**
-   * Alternative to handle the activity result. The `onNewIntent` method is only call if the App was killed while logging in.
-   */
-  handleResultOnNewIntent?: boolean;
-  /**
-   * Default handling the activity result.
-   */
-  handleResultOnActivityResult?: boolean;
-}
-
-export interface IosOptions extends OAuth2AuthenticateBaseOptions {
-  /**
-   * Some oauth provider especially Facebook forces us to use their SDK for apps.
-   *
-   * Provide a class name implementing the 'ByteowlsCapacitorOauth2.OAuth2CustomHandler' protocol.
-   */
-  customHandlerClass?: string;
 }

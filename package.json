@@ -1,6 +1,6 @@
 {
   "name": "capacitor-microsoft-auth",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Capacitor plugin for Microsoft Authentication",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -8,7 +8,8 @@
     "build": "npm run clean && tsc",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "rimraf": "./node_modules/rimraf/bin.js"
   },
   "author": "Pratik Jaiswal",
   "license": "MIT",
